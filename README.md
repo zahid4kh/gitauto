@@ -15,7 +15,11 @@ A simple bash script to automate your Git workflow by automating the commit and 
 
 ### Quick Setup
 
-1. Download the script
+1. Download the script:
+   
+   ```bash
+   curl -o gitauto.sh https://raw.githubusercontent.com/zahid4kh/gitauto/main/gitauto.sh
+   ```
 
 2. Make the script executable:
    
