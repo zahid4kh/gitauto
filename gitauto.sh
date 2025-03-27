@@ -63,60 +63,93 @@ if [ ! -d .git ]; then
 fi
 
 #############################################################################
-echo -e "${YELLOW}Adding all files to git...${NC}"
+if [[ -z $(git status -s) ]]; then
+    echo -e "   ${YELLOW}No changes detected in the repository.${NC}"
+    echo -e "   ${YELLOW}Would you like to continue anyway? (y/n)${NC}"
+    read -p "   > " continue_response
+    
+    case $continue_response in
+        [Nn]|[Nn][Oo])
+            echo -e "\n${BLUE}${BOLD}✓ Operation canceled.${NC}"
+            exit 0
+            ;;
+    esac
+fi
+############################################################################
+
 git add .
 if [ $? -eq 0 ]; then
-    echo -e "${GREEN}Successfully added files.${NC}"
+    echo -e "   ${GREEN}${BOLD}✓ Successfully added files to git...${NC}"
 else
-    echo -e "${RED}Error adding files. Exiting script.${NC}"
+    echo -e "   ${RED}${BOLD}✖ Error adding files. Exiting script.${NC}"
     exit 1
 fi
 
 ###############################################################
-echo -e "${YELLOW}Please enter your commit message:${NC}"
-read commit_message
+echo ""
+echo -e "${CYAN}${BOLD}[2/3]${NC} ${YELLOW}Committing changes...${NC}"
+
+echo -e "   ${YELLOW}Enter your commit message:${NC}"
+echo -e "   ${CYAN}─────────────────────────────────────────${NC}"
+read -p "   > " commit_message
+echo -e "   ${CYAN}─────────────────────────────────────────${NC}"
 
 if [ -z "$commit_message" ]; then
-    echo -e "${RED}Commit message cannot be empty. Exiting script.${NC}"
+    echo -e "   ${RED}${BOLD}✖ Commit message cannot be empty. Exiting script.${NC}"
     exit 1
 fi
 
 #############################################################################
-echo -e "${YELLOW}Committing changes with message: '${commit_message}'${NC}"
+echo -e "   ${YELLOW}Committing with message:${NC} ${MAGENTA}\"${commit_message}\"${NC}"
 git commit -m "$commit_message"
 if [ $? -eq 0 ]; then
-    echo -e "${GREEN}Successfully committed changes.${NC}"
+    echo -e "   ${GREEN}${BOLD}✓ Successfully committed changes.${NC}"
 else
-    echo -e "${RED}Error committing changes. Exiting script.${NC}"
+    echo -e "   ${RED}${BOLD}✖ Error committing changes. Exiting script.${NC}"
     exit 1
 fi
 
 #########################################################################
+echo ""
+echo -e "${CYAN}${BOLD}[3/3]${NC} ${YELLOW}Push options${NC}"
+
 while true; do
-    echo -e "${YELLOW}Would you like to push changes to origin/main? (y/n)${NC}"
-    read push_response
+    echo -e "   ${YELLOW}Would you like to push changes to origin/main?${NC}"
+    echo -e "   ${GREEN}[y]${NC} Yes  ${RED}[n]${NC} No"
+    read -p "   > " push_response
     
     case $push_response in
         [Yy]|[Yy][Ee][Ss])
-            echo -e "${YELLOW}Pushing changes to origin/main...${NC}"
+            echo -e "   ${YELLOW}Pushing changes to origin/main...${NC}"
             git push origin main
             if [ $? -eq 0 ]; then
-                echo -e "${GREEN}Successfully pushed changes to origin/main.${NC}"
+                echo -e "   ${GREEN}${BOLD}✓ Successfully pushed changes to origin/main.${NC}"
             else
-                echo -e "${RED}Error pushing changes. Please check your connection or repository settings.${NC}"
+                echo -e "   ${RED}${BOLD}✖ Error pushing changes.${NC}"
+                echo -e "   ${YELLOW}Please check your connection or repository settings.${NC}"
                 exit 1
             fi
             break
             ;;
         [Nn]|[Nn][Oo])
-            echo -e "${BLUE}Changes were committed but not pushed.${NC}"
+            echo -e "   ${BLUE}${BOLD}ℹ Changes were committed but not pushed.${NC}"
             break
             ;;
         *)
-            echo -e "${RED}Please answer with 'y' or 'n'.${NC}"
+            echo -e "   ${RED}Please answer with 'y' or 'n'.${NC}"
             ;;
     esac
 done
 
-echo -e "${GREEN}Git operation completed successfully!${NC}"
+echo ""
+draw_line
+center_text "OPERATION SUMMARY" "${GREEN}"
+echo ""
+echo -e "  ${GREEN}${BOLD}✓ Git operation completed successfully!${NC}"
+echo -e "  ${YELLOW}▶ Repository:${NC} $(basename $(git rev-parse --show-toplevel))"
+echo -e "  ${YELLOW}▶ Branch:${NC} $(git branch --show-current)"
+echo -e "  ${YELLOW}▶ Commit:${NC} $(git rev-parse --short HEAD)"
+echo -e "  ${YELLOW}▶ Time:${NC} $(date '+%Y-%m-%d %H:%M:%S')"
+echo ""
+draw_line
 exit 0
