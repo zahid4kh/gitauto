@@ -41,18 +41,18 @@ echo ""
 
 if [ -z "$PROJECT_PATH" ]; then
     PROJECT_PATH=$(pwd)
-    echo -e "${YELLOW}Using current directory: ${PROJECT_PATH}${NC}"
+    echo -e "${YELLOW}${BOLD}▶ Using current directory:${NC} ${UNDERLINE}${PROJECT_PATH}${NC}"
 else
     if [ ! -d "$PROJECT_PATH" ]; then
-        echo -e "${RED}Project directory does not exist: ${PROJECT_PATH}${NC}"
+        echo -e "${RED}${BOLD}✖ ERROR:${NC} Project directory does not exist: ${UNDERLINE}${PROJECT_PATH}${NC}"
         exit 1
     fi
     
-    echo -e "${YELLOW}▶ Using configured project path: ${PROJECT_PATH}${NC}"
+    echo -e "${YELLOW}${BOLD}▶ Using configured project path:${NC} ${UNDERLINE}${PROJECT_PATH}${NC}"
     
     cd "$PROJECT_PATH"
     if [ $? -ne 0 ]; then
-        echo -e "${RED}Failed to change to project directory. Exiting script.${NC}"
+        echo -e "${RED}${BOLD}✖ ERROR:${NC} Failed to change to project directory. Exiting script."
         exit 1
     fi
 fi
