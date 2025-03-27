@@ -13,7 +13,31 @@ NC='\033[0m'
 
 PROJECT_PATH=""
 
-echo -e "${BLUE}---> Git Automation Script <---${NC}"
+#############################################################################
+# FUNCTIONS FOR TUI
+draw_line() {
+    printf "${CYAN}%$(tput cols)s${NC}\n" | tr ' ' '─'
+}
+
+center_text() {
+    local text="$1"
+    local color="$2"
+    local width=$(tput cols)
+    local padding=$(( (width - ${#text}) / 2 ))
+    printf "%${padding}s" ""
+    printf "${color}${BOLD}%s${NC}\n" "$text"
+}
+###########################################################################
+
+clear
+draw_line
+center_text "GIT AUTOMATION TOOL" "${MAGENTA}"
+draw_line
+echo ""
+
+echo -e "${BLUE}[$(date '+%Y-%m-%d %H:%M:%S')]${NC} Starting Git automation..."
+echo ""
+
 
 if [ -z "$PROJECT_PATH" ]; then
     PROJECT_PATH=$(pwd)
