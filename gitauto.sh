@@ -48,7 +48,7 @@ else
         exit 1
     fi
     
-    echo -e "${YELLOW}Using configured project path: ${PROJECT_PATH}${NC}"
+    echo -e "${YELLOW}▶ Using configured project path: ${PROJECT_PATH}${NC}"
     
     cd "$PROJECT_PATH"
     if [ $? -ne 0 ]; then
