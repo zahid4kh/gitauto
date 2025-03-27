@@ -58,7 +58,7 @@ else
 fi
 
 if [ ! -d .git ]; then
-    echo -e "${RED}Not a git repository. Please check your project path.${NC}"
+    echo -e "${RED}${BOLD}✖ ERROR:${NC} Not a git repository. Please check your project path."
     exit 1
 fi
 
