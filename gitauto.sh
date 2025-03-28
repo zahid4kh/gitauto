@@ -36,7 +36,7 @@ center_text() {
 
 clear
 draw_line
-center_text "GIT AUTOMATION TOOL" "${MAGENTA}"
+center_text "🚀 GIT AUTOMATION TOOL 🚀" "${MAGENTA}"
 draw_line
 echo ""
 
