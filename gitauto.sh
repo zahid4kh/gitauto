@@ -42,7 +42,7 @@ echo ""
 
 echo -e "${BLUE}[$(date '+%Y-%m-%d %H:%M:%S')]${NC} Starting Git automation..."
 echo ""
-
+sleep 0.8
 
 if [ -z "$PROJECT_PATH" ]; then
     PROJECT_PATH=$(pwd)
@@ -98,6 +98,7 @@ fi
 
 #############################################################################
 echo -e "${CYAN}${BOLD}[1/3]${NC} ${YELLOW}Checking for changes...${NC}"
+sleep 0.5
 
 if [[ -z $(git status -s) ]]; then
     echo -e "   ${YELLOW}${BOLD}ℹ No changes detected in the repository.${NC}"
@@ -106,11 +107,13 @@ if [[ -z $(git status -s) ]]; then
 fi
 
 echo -e "   ${GREEN}${BOLD}✓ Changes detected! Adding to git...${NC}"
+sleep 0.5
 ############################################################################
 
 git add .
 if [ $? -eq 0 ]; then
     echo -e "   ${GREEN}${BOLD}✓ Successfully added files to git...${NC}"
+    sleep 0.2
 else
     echo -e "   ${RED}${BOLD}✖ Error adding files. Exiting script.${NC}"
     exit 1
@@ -132,6 +135,8 @@ fi
 
 #############################################################################
 echo -e "   ${YELLOW}Committing with message:${NC} ${MAGENTA}\"${commit_message}\"${NC}"
+sleep 0.8
+
 git commit -m "$commit_message"
 if [ $? -eq 0 ]; then
     echo -e "   ${GREEN}${BOLD}✓ Successfully committed changes.${NC}"
@@ -152,6 +157,8 @@ while true; do
     case $push_response in
         [Yy]|[Yy][Ee][Ss])
             echo -e "   ${YELLOW}Pushing changes to origin/main...${NC}"
+            sleep 0.8
+            
             git push origin main
             if [ $? -eq 0 ]; then
                 echo -e "   ${GREEN}${BOLD}✓ Successfully pushed changes to origin/main.${NC}"
@@ -172,14 +179,20 @@ while true; do
     esac
 done
 
+##############################################################################
+
+COMMIT_HASH=$(git rev-parse --short HEAD)
+COMMIT_MSG=$(git log -1 --pretty=%B | head -n 1)
+COMMIT_MSG_SHORT=$(echo "$COMMIT_MSG" | cut -c 1-15)
+
 echo ""
 draw_line
-center_text "OPERATION SUMMARY" "${GREEN}"
+center_text "🎉 OPERATION SUMMARY 🎉" "${GREEN}"
 echo ""
 echo -e "  ${GREEN}${BOLD}✓ Git operation completed successfully!${NC}"
 echo -e "  ${YELLOW}▶ Repository:${NC} $(basename $(git rev-parse --show-toplevel))"
 echo -e "  ${YELLOW}▶ Branch:${NC} $(git branch --show-current)"
-echo -e "  ${YELLOW}▶ Commit:${NC} $(git rev-parse --short HEAD)"
+echo -e "  ${YELLOW}▶ Commit:${NC} ${COMMIT_HASH} (\"${COMMIT_MSG_SHORT}...\")"
 echo -e "  ${YELLOW}▶ Time:${NC} $(date '+%Y-%m-%d %H:%M:%S')"
 echo ""
 draw_line
