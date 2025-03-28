@@ -16,7 +16,12 @@ PROJECT_PATH=""
 #############################################################################
 # FUNCTIONS FOR TUI
 draw_line() {
-    printf "${CYAN}%$(tput cols)s${NC}\n" | tr ' ' '─'
+    local width=$(tput cols)
+    local line=""
+    for ((i=0; i<width; i++)); do
+        line+="━" 
+    done
+    echo -e "${CYAN}${line}${NC}"
 }
 
 center_text() {
