@@ -67,8 +67,6 @@ if [ ! -d .git ]; then
     echo -e "${YELLOW}${BOLD}⚠ Git repository not found in this directory.${NC}"
     echo -e "${BLUE}${BOLD}🔍 Checking if we should initialize git...${NC}"
     
-    sleep 0.5
-    
     echo -e "${YELLOW}${BOLD}🔧 Initializing new git repository...${NC}"
     git init
     if [ $? -eq 0 ]; then
@@ -98,7 +96,7 @@ fi
 
 #############################################################################
 echo -e "${CYAN}${BOLD}[1/3]${NC} ${YELLOW}Checking for changes...${NC}"
-sleep 0.5
+sleep 0.2
 
 if [[ -z $(git status -s) ]]; then
     echo -e "   ${YELLOW}${BOLD}ℹ No changes detected in the repository.${NC}"
@@ -107,7 +105,7 @@ if [[ -z $(git status -s) ]]; then
 fi
 
 echo -e "   ${GREEN}${BOLD}✓ Changes detected! Adding to git...${NC}"
-sleep 0.5
+sleep 0.2
 ############################################################################
 
 git add .
@@ -135,7 +133,7 @@ fi
 
 #############################################################################
 echo -e "   ${YELLOW}Committing with message:${NC} ${MAGENTA}\"${commit_message}\"${NC}"
-sleep 0.8
+sleep 0.2
 
 git commit -m "$commit_message"
 if [ $? -eq 0 ]; then
@@ -157,7 +155,7 @@ while true; do
     case $push_response in
         [Yy]|[Yy][Ee][Ss])
             echo -e "   ${YELLOW}Pushing changes to origin/main...${NC}"
-            sleep 0.8
+            sleep 0.2
             
             git push origin main
             if [ $? -eq 0 ]; then
