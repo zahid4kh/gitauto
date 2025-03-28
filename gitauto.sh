@@ -62,24 +62,50 @@ else
     fi
 fi
 
+
 if [ ! -d .git ]; then
-    echo -e "${RED}${BOLD}✖ ERROR:${NC} Not a git repository. Please check your project path."
-    exit 1
+    echo -e "${YELLOW}${BOLD}⚠ Git repository not found in this directory.${NC}"
+    echo -e "${BLUE}${BOLD}🔍 Checking if we should initialize git...${NC}"
+    
+    sleep 0.5
+    
+    echo -e "${YELLOW}${BOLD}🔧 Initializing new git repository...${NC}"
+    git init
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}${BOLD}✓ Git repository initialized successfully!${NC}"
+        
+        if [ ! -f .gitignore ]; then
+            echo -e "${YELLOW}${BOLD}📝 Creating default .gitignore file...${NC}"
+            cat > .gitignore << EOF
+.idea/
+.kotlin/
+.vscode/
+*.swp
+*.swo
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+EOF
+            echo -e "${GREEN}${BOLD}✓ Default .gitignore created!${NC}"
+        fi
+    else
+        echo -e "${RED}${BOLD}✖ Failed to initialize git repository. Exiting script.${NC}"
+        exit 1
+    fi
 fi
 
 #############################################################################
+echo -e "${CYAN}${BOLD}[1/3]${NC} ${YELLOW}Checking for changes...${NC}"
+
 if [[ -z $(git status -s) ]]; then
-    echo -e "   ${YELLOW}No changes detected in the repository.${NC}"
-    echo -e "   ${YELLOW}Would you like to continue anyway? (y/n)${NC}"
-    read -p "   > " continue_response
-    
-    case $continue_response in
-        [Nn]|[Nn][Oo])
-            echo -e "\n${BLUE}${BOLD}✓ Operation canceled.${NC}"
-            exit 0
-            ;;
-    esac
+    echo -e "   ${YELLOW}${BOLD}ℹ No changes detected in the repository.${NC}"
+    echo -e "   ${BLUE}${BOLD}✓ Exiting the script since no changes were detected.${NC}"
+    exit 0
 fi
+
+echo -e "   ${GREEN}${BOLD}✓ Changes detected! Adding to git...${NC}"
 ############################################################################
 
 git add .
